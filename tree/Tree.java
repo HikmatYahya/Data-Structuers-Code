@@ -1,6 +1,5 @@
 package tree;
 
-import java.util.Scanner;
 
 /* Class Node */
 class Node {

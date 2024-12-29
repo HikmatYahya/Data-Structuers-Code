@@ -1,76 +1,76 @@
 package queue;
 
-// A class to represent a queue
 public class Queue {
+    private static final int INITIAL_SIZE = 10; // Initial size of the queue
+    private int[] queueArray;
+    private int front;
+    private int rear;
+    private int size;
 
-	int front, rear, size;
-	int capacity;
-	int array[];
+    public Queue() {
+        queueArray = new int[INITIAL_SIZE];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
 
-	public Queue(int capacity) {
+    public void enqueue(int item) {
+        if (size == queueArray.length) {
+            resize(); // Resize if the queue is full
+        }
+        rear = (rear + 1) % queueArray.length;
+        queueArray[rear] = item;
+        size++;
+    }
+    
+    
+    
+    
 
-		this.capacity = capacity;
-		front = this.size = 0;
-		rear = -1;
-		array = new int[this.capacity];
-	}
+    public int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty.");
+            return -1; 
+        }
+        int removedItem = queueArray[front];
+        front = (front + 1) % queueArray.length;
+        size--;
+        return removedItem;
+    }
+    
+    
+    
 
-	// Queue is full when size becomes
-	// equal to the capacity
-	boolean isFull() {
-		
-		return (this.size == this.capacity);
-	}
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty.");
+            return -1; 
+        }
+        return queueArray[front];
+    }
 
-	// Queue is empty when size is 0
-	boolean isEmpty() {
-		
-		return (this.size == 0);
-	}
+    public boolean isEmpty() {
+        return size == 0;
+    }
 
-	// Method to add an item to the queue.
-	// It changes rear and size
-	void enqueue(int item) {
+    public int size() {
+        return size;
+    }
 
-		if (isFull())
-			return;
+    // Resize the queue when it is full
+    private void resize() {
+        int newSize = queueArray.length * 2; 
+        int[] newQueueArray = new int[newSize];
 
-		rear = (rear + 1) % this.capacity;
-		array[rear] = item;
-		size = size + 1;
+        
+        
+        for (int i = 0; i < size; i++) {
+            newQueueArray[i] = queueArray[(front + i) % queueArray.length];
+        }
 
-		System.out.println(item + " enqueued to queue");
-	}
-
-	// Method to remove an item from queue.
-	// It changes front and size
-	int dequeue() {
-		if (isEmpty())
-			return Integer.MIN_VALUE;
-
-		int item = array[front];
-		
-		
-		front = (front + 1) % capacity;
-		size = size - 1;
-		
-		return item;
-	}
-
-	// Method to get front of queue
-	int front() {
-		if (isEmpty())
-			return Integer.MIN_VALUE;
-
-		return this.array[this.front];
-	}
-
-	// Method to get rear of queue
-	int rear() {
-		if (isEmpty())
-			return Integer.MIN_VALUE;
-
-		return this.array[this.rear];
-	}
-
+        front = 0;
+        rear = size - 1;
+        queueArray = newQueueArray;
+        System.out.println("Queue resized to " + newSize);
+    }
 }
